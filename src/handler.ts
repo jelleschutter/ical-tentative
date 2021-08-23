@@ -2,7 +2,7 @@ export async function handleRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const iCalUrl = decodeURIComponent(url.pathname).substring(1);
   if (!iCalUrl.startsWith('https://')) {
-    return new Response('Invalid URL. See: https://github.com/jelleschutter/tentative-ical#how-to');
+    return new Response('Invalid URL. See: https://github.com/jelleschutter/tentative-ical#-how-to');
   }
   const iCalendar = await getICalendar(iCalUrl);
   return new Response(`${iCalendar}`);
