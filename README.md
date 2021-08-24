@@ -7,7 +7,7 @@ A way to make all iCal events tentative in Outlook.
 To use this proxy for your calendar. Add it behind the url: `https://tentative.jelleschutter.workers.dev/` as a URI encoded string. For example in JavaScript this can be acomplished with the following snippet:
 ```javascript
 const iCalUrl = encodeURIComponent('https://...')
-const url = `https://tentative.jelleschutter.workers.dev/${iCalUrl}`
+const url = `https://tentative.schutter.xyz/ical/${iCalUrl}`
 ```
 
 ### 💻 Developing
