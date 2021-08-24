@@ -5,7 +5,11 @@ export async function handleRequest(request: Request): Promise<Response> {
     return new Response('Invalid URL. See: https://github.com/jelleschutter/tentative-ical#-how-to');
   }
   const iCalendar = await getICalendar(iCalUrl);
-  return new Response(`${iCalendar}`);
+  return new Response(`${iCalendar}`, {
+    headers: {
+      'Content-Type': 'text/calendar'
+    }
+  });
 }
 
 function getICalendar(url: string): Promise<string> {
