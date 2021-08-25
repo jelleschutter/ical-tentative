@@ -4,7 +4,11 @@ export async function handleRequest(request: Request): Promise<Response> {
   if (!(iCalUrl.startsWith('https://') || iCalUrl.startsWith('http://'))) {
     return new Response('Invalid URL. See: https://github.com/jelleschutter/tentative-ical#-how-to', { status: 400 });
   }
-  const iCalendar = await getICalendar(iCalUrl);
+  let status = url.searchParams.get('status');
+  if (!status || !['TENTATIVE', 'BUSY', 'FREE', 'OOF'].includes(status)) {
+    status = 'TENTATIVE';
+  }
+  const iCalendar = await getICalendar(iCalUrl, status);
   if (iCalendar === '') {
     return new Response('Could not detect a iCalendar.', { status: 400 });
   }
@@ -18,7 +22,7 @@ export async function handleRequest(request: Request): Promise<Response> {
   });
 }
 
-function getICalendar(url: string): Promise<string> {
+function getICalendar(url: string, status: string): Promise<string> {
   return fetch(url)
     .then(response => {
       if (response.headers.get('content-type') !== 'text/calendar') {
@@ -30,6 +34,6 @@ function getICalendar(url: string): Promise<string> {
       if (!text) {
         return '';
       }
-      return text.replace(/(\r?\n?)END:VEVENT/g, '$1X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE$1END:VEVENT');
+      return text.replace(/(\r?\n?)END:VEVENT/g, `$1X-MICROSOFT-CDO-BUSYSTATUS:${status}$1END:VEVENT`);
     });
 }
